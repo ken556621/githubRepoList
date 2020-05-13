@@ -1,6 +1,8 @@
 const initiaState = {
     repoListData: [],
-    finishFetching: false
+    finishFetching: false,
+    currentPage: 1,
+    pageItems: 10
 }
 
 const loginReducer = (state = initiaState, action) => {
@@ -8,7 +10,9 @@ const loginReducer = (state = initiaState, action) => {
         case "FETCH_GITGUB_DATA":
             return {
                 ...state,
-                finishFetching: false
+                finishFetching: false,
+                currentPage: action.payload.currentPage,
+                pageItems: action.payload.pageItems
             }
         case "UPDATE_REPO_DATA":
             return {

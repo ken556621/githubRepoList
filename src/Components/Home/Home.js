@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import RepoSearch from './RepoSearch';
 import RepoList from './RepoList';
 
 import './Home.scss';
 
 class Home extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            isLoading: true,
-            currentPage: 1
-        }
-    }
     componentDidMount(){
-        const { currentPage } = this.state;
-        const { dispatch } =this.props;
-        dispatch({ type: "FETCH_GITGUB_DATA", payload: currentPage })
+        const pageItems = 10;
+        const { currentPage, dispatch } = this.props;
+        dispatch({ type: "FETCH_GITGUB_DATA", payload: { currentPage, pageItems } })
         window.addEventListener("scroll", this.fetchNextPageData);
     }
 
@@ -25,24 +17,21 @@ class Home extends Component {
     }
 
     fetchNextPageData = () => {
-        let { currentPage } = this.state;
-        const { finishFetching, dispatch } =this.props;
-        console.log("Ready to Fetch");
+        const { finishFetching, dispatch } = this.props;
+        let { currentPage, pageItems } = this.props;
         if(!finishFetching){
             return
         }
         if(window.pageYOffset > document.body.offsetHeight - window.innerHeight){
-            console.log("Fetch");
-            this.setState({
-                page: currentPage++
-            }, dispatch({ type: "FETCH_GITGUB_DATA", payload: currentPage }))
+            currentPage = currentPage++;
+            pageItems = pageItems + 10
+            dispatch({ type: "FETCH_GITGUB_DATA", payload: { currentPage, pageItems } })
         }
     }
 
     render() { 
         return (
             <div className="home-container">
-                <RepoSearch />
                 <RepoList />
             </div>
         );
@@ -52,7 +41,9 @@ class Home extends Component {
 function mapStateToProps(store){
     return {
         repoListData: store.repo.repoListData,
-        finishFetching: store.repo.finishFetching
+        finishFetching: store.repo.finishFetching,
+        currentPage: store.repo.currentPage,
+        pageItems: store.repo.pageItems
     }
 }
  

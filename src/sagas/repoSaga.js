@@ -3,9 +3,8 @@ import { takeLatest, put, call } from 'redux-saga/effects';
 function* fetchGithubData(action){
     const baseURL = "https://api.github.com/users/";
     const userName = "ken556621";
-    const eachPageItems = 10;
     const data = yield call(
-        () => fetch(`${baseURL}${userName}/repos?page=${action.payload.page}&per_page=${eachPageItems}`)
+        () => fetch(`${baseURL}${userName}/repos?page=${action.payload.currentPage}&per_page=${action.payload.pageItems}`)
         .then(response => response.json())
     );
     yield put({ type: "UPDATE_REPO_DATA", payload: { data } });
