@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import RepoList from './RepoList';
 
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
 import './Home.scss';
 
 class Home extends Component {
@@ -24,7 +26,7 @@ class Home extends Component {
         }
         if(window.pageYOffset > document.body.offsetHeight - window.innerHeight){
             currentPage = currentPage++;
-            pageItems = pageItems + 10
+            pageItems = pageItems + 10;
             dispatch({ type: "FETCH_GITGUB_DATA", payload: { currentPage, pageItems } })
         }
     }
@@ -32,6 +34,11 @@ class Home extends Component {
     render() { 
         return (
             <div className="home-container">
+                <AppBar position="fixed" className="navi-bar">
+                    <Typography variant="h6">
+                        KenYu Github Repositories
+                    </Typography>
+                </AppBar>
                 <RepoList />
             </div>
         );
